@@ -633,6 +633,8 @@
     <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-framwork.png" width="80%">
 </center>
 
+<span id="more"></span>
+
 <h2 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h2><blockquote>
 <p>Python 3.9.4 <br><br>Glances 3.2.7 <br><br>Influxdb 1.7.10 <br><br>Grafana 8.5.9</p>
 </blockquote>

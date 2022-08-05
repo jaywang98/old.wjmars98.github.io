@@ -216,7 +216,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-08-05 17:21:11 / 修改时间：17:23:22" itemprop="dateCreated datePublished" datetime="2022-08-05T17:21:11+08:00">2022-08-05</time>
+              <time title="创建时间：2022-08-05 17:21:11 / 修改时间：18:04:33" itemprop="dateCreated datePublished" datetime="2022-08-05T17:21:11+08:00">2022-08-05</time>
             </span>
 
           
@@ -234,85 +234,14 @@
 <center>
     <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-framwork.png" width="80%">
 </center>
-
-<h2 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h2><blockquote>
-<p>Python 3.9.4 <br><br>Glances 3.2.7 <br><br>Influxdb 1.7.10 <br><br>Grafana 8.5.9</p>
-</blockquote>
-<h2 id="Show"><a href="#Show" class="headerlink" title="Show"></a>Show</h2><center>
-    <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-display.png" width="80%">
-</center>
-
-<p><strong>Major Monitored Objects:</strong></p>
-<ul>
-<li>CPU(%)</li>
-<li>Disk</li>
-<li>Memory</li>
-<li>Network</li>
-</ul>
-<h2 id="Deploy"><a href="#Deploy" class="headerlink" title="Deploy"></a>Deploy</h2><h3 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h3><p>There existed a dependence between influxdb and grafana and it’s significant to choose the<br>suitable version.</p>
-<blockquote>
-<p>The instructions in this guide require Grafana Cloud or Grafana v7.1+. For information about<br>using InfluxDB with other versions of Grafana, see the Grafana documentation.</p>
-</blockquote>
-<h3 id="Glances"><a href="#Glances" class="headerlink" title="Glances"></a>Glances</h3><p>Glances is on PyPI, To install, simply use pip</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install glances</span><br></pre></td></tr></table></figure>
-<p>After installing glances, we can use command <code>glances</code> to test it.</p>
-<center>
-    <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-glances.png" width="80%">
-</center>
-
-
-<h3 id="Influxdb1-7"><a href="#Influxdb1-7" class="headerlink" title="Influxdb1.7"></a>Influxdb1.7</h3><h4 id="install-online"><a href="#install-online" class="headerlink" title="install online"></a>install online</h4><p><a target="_blank" rel="noopener" href="https://docs.influxdata.com/influxdb/v1.7/introduction/installation/">influxdata.com documents</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF | sudo tee /etc/yum.repos.d/influxdb.repo</span><br><span class="line">[influxdb]</span><br><span class="line">name = InfluxDB Repository - RHEL \$releasever</span><br><span class="line">baseurl = https://repos.influxdata.com/rhel/\$releasever/\$basearch/stable</span><br><span class="line">enabled = 1</span><br><span class="line">gpgcheck = 1</span><br><span class="line">gpgkey = https://repos.influxdata.com/influxdb.key</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install influxdb</span><br><span class="line">sudo service influxdb start</span><br></pre></td></tr></table></figure>
-
-<h4 id="install-offline"><a href="#install-offline" class="headerlink" title="install offline"></a>install offline</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /PATH/TO/cockpit/pkg/</span><br><span class="line">yum installlocal  influxdb-1.7.10.x86_64.rpm</span><br></pre></td></tr></table></figure>
-
-<h4 id="start-influx-service"><a href="#start-influx-service" class="headerlink" title="start influx service"></a>start influx service</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sudo service influxdb start</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">start, status, stop</span></span><br><span class="line">sudo systemctl start influxdb.service</span><br><span class="line">sudo systemctl status influxdb.service</span><br><span class="line">sudo systemctl stop influxdb.service</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># check the influx service log</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">real-time</span></span><br><span class="line">journalctl -f -u influxdb.service</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">latest 100 lines</span></span><br><span class="line">journalctl -n 100 -u influxdb.service</span><br></pre></td></tr></table></figure>
-
-<h3 id="Grafana"><a href="#Grafana" class="headerlink" title="Grafana"></a>Grafana</h3><h4 id="install-offline-1"><a href="#install-offline-1" class="headerlink" title="install offline"></a>install offline</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">download grafana</span></span><br><span class="line">cd /PATH/TO/cockpit/pkg/</span><br><span class="line">yum installlocal grafana-8.5.9-1.x86_64.rpm</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">start the grafana service</span></span><br><span class="line">service grafana-service satrt</span><br></pre></td></tr></table></figure>
-
-<h3 id="Combination"><a href="#Combination" class="headerlink" title="Combination"></a>Combination</h3><h4 id="1-Create-database"><a href="#1-Create-database" class="headerlink" title="1. Create database"></a>1. Create database</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">influx</span><br><span class="line">create database glances</span><br><span class="line">use database</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-Load-glances-data"><a href="#2-Load-glances-data" class="headerlink" title="2. Load glances data"></a>2. Load glances data</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">single <span class="built_in">command</span></span></span><br><span class="line">glances --export influxdb</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">service</span></span><br><span class="line">vi /etc/systemd/system/glances.service</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># service config, and focus on ExecStart</span></span></span><br><span class="line">[Unit]</span><br><span class="line">Description=Glances</span><br><span class="line">After=network.target influxd.service</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/local/bin/glances --config /etc/glances/glances.conf --quiet --export influxdb</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=30s</span><br><span class="line">TimeoutSec=30s</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">reload the systemctl</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl start glances.service</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">auto start glance service when server start</span></span><br><span class="line">systemctl enable glances.service</span><br></pre></td></tr></table></figure>
-
-<p>Try to select data from influxdb glances databases or read glances log to ensuring data loaded.</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">select database data, new tables will be created <span class="keyword">if</span> data loaded successfully.</span></span><br><span class="line">influx</span><br><span class="line">use glances</span><br><span class="line">show merasurements</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">use journalctl to check influxdb <span class="built_in">log</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">real-time</span></span><br><span class="line">journalctl -f -u influxdb.service </span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">latest 100 <span class="built_in">log</span> line</span></span><br><span class="line">journalctl -n 100 -u influxdb.service </span><br></pre></td></tr></table></figure>
-
-<h4 id="3-Crate-Grafana-Dashboard"><a href="#3-Crate-Grafana-Dashboard" class="headerlink" title="3. Crate Grafana Dashboard"></a>3. Crate Grafana Dashboard</h4><p>Open <a target="_blank" rel="noopener" href="http://localhost:3000/">http://localhost:3000</a> in the local browser.</p>
-<center>
-    <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-datasource.png" width="80%">
-</center>
-
-<center>
-    <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-datasource1.png" width="80%">
-</center>
-
-<center>
-    <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-datasource2.png" width="80%">
-</center>
-
-<center>
-    <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-datasource3.png" width="80%">
-</center>
-
-<p>The datasource was created, and then we need to import the dashboard.</p>
-<center>
-    <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-dashboard.png" width="80%">
-</center>
-
-<center>
-    <img src="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-dashboard1.png" width="80%">
-</center>
-
-<p>Finally, click the import to finish creating the monitor program.</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
-<li><a target="_blank" rel="noopener" href="https://grafana.com/">Grafana Office</a></li>
-<li><a target="_blank" rel="noopener" href="https://nicolargo.github.io/glances/">Glances Ofiice</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.influxdata.com/influxdb/v1.7/">Influx 1.7 Office Doc</a></li>
-<li><a target="_blank" rel="noopener" href="https://glances.readthedocs.io/en/latest/gw/influxdb.html">Glances, InfluxDB, Glances</a></li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/08/05/Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
