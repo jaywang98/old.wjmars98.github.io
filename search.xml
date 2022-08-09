@@ -1546,11 +1546,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Scrapy 503 status error solution</title>
-    <url>/2022/06/01/Scrapy-503-status-error-solution/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>Scrapy——DebuggingSpiders</title>
     <url>/2022/04/28/Scrapy-Debug/</url>
     <content><![CDATA[<p>在使用scrapy的时候，由于不能像平常一样对代码进行调试，花费了大量的时间在scrapy运行的等待上，每次溯源去寻找问题都非常麻烦。后来发现scrapy也有属于自己的调试方法，也用此文来记录学习一下scrapy的调试知识。</p>
@@ -1594,6 +1589,54 @@
 <p>注意: 由于该终端屏蔽了Scrapy引擎，您在这个终端中不能使用 fetch 快捷命令(shortcut)。 当您离开终端时，spider会从其停下的地方恢复爬取，正如上面显示的那样。</p>
 </blockquote>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://scrapy-chs.readthedocs.io/zh_CN/0.24/topics/shell.html">1. Scrapy终端(Scrapy shell)</a></p>
+]]></content>
+      <categories>
+        <category>Big Data</category>
+      </categories>
+      <tags>
+        <tag>scrapy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Scrapy: Manage Multiple Pipelines</title>
+    <url>/2022/05/10/Scrapy-Manage-Multiple-Pipelines/</url>
+    <content><![CDATA[<p>It’s a common situation that managing multiple pipelines are required  when we try to develop some scrapy projects and decide the order of the pipelines. </p>
+<p>What’s worse, there may be not only one spider in the porject, and each  spider own different requirements to the project pipelines. And there is no doubt that <strong>effective management of pipelines can greatly improve our efficiency</strong> which is also the purpose of this article.</p>
+<center>
+    <img src="/2022/05/10/Scrapy-Manage-Multiple-Pipelines/logo.png" , width="80%">
+</center>
+<span id="more"></span>
+
+<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><p>To be more specific, I would love to share a software developing program situation appeared in my program developing process.</p>
+<p>When I tried to develop a scrapy project to crawl some data on the imdb website, which not only included the titles and release time, rating and other text data, but also contained the images data like movie posters, I found the a single item contains both.</p>
+<p>To solve this problem, of course, we can try to create different spiders which can crawl text data while the other can crawl image data. However, basing on our observation, this data can be crawled by only one spider if we can assemble a functional pipeline module.  Comparing to the first solution, this approach has several advantages:</p>
+<ul>
+<li>High Efficiency</li>
+<li>Code Modularization</li>
+<li>Easy to Debug</li>
+</ul>
+<h2 id="Understand-Pipeline-Module"><a href="#Understand-Pipeline-Module" class="headerlink" title="Understand Pipeline Module"></a>Understand Pipeline Module</h2><p>According to <a href="https://docs.scrapy.org/en/latest/topics/item-pipeline.html">scrapy document</a>, the pipeline is briefly descriped as: </p>
+<blockquote>
+<p>Item has been scraped by a spider, it is sent to the Item Pipeline which processes it through several components that are executed sequentially.</p>
+</blockquote>
+<p>As mentioned above, pipeline is designed to process the item data from spiders. And to achieve the designated function, we can try to assemble a number of pipelines in a specific order which is the key to  make a pipeline module to implement complex functions.</p>
+<p>As the following code shows, the “custom_setting” decided each pipelines’ order for item data.  In this way, we can make full use of the data contained in item.</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># For example</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MovieSpider</span>(scrapy.Spider):</span><br><span class="line">    name = <span class="string">&quot;list&quot;</span></span><br><span class="line">    allowed_domains = [<span class="string">&quot;imdb.com&quot;</span>]</span><br><span class="line">    start_urls = [<span class="string">&quot;https://www.imdb.com/title/tt4788734/&quot;</span>]</span><br><span class="line"></span><br><span class="line">    custom_settings = &#123;</span><br><span class="line">        <span class="string">&quot;ITEM_PIPELINES&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;imdbSpider.pipelines.InitSettingPipeline&quot;</span>: <span class="number">100</span>,</span><br><span class="line">            <span class="string">&quot;imdbSpider.pipelines.BannerPipeline&quot;</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="string">&quot;imdbSpider.pipelines.ImagePipeline&quot;</span>: <span class="number">400</span>,</span><br><span class="line">            <span class="string">&#x27;imdbSpider.pipelines.ProcessImagePipeline&#x27;</span>: <span class="number">500</span>,</span><br><span class="line">            <span class="string">&#x27;imdbSpider.pipelines.UploadPipeline&#x27;</span>: <span class="number">600</span>,</span><br><span class="line">            <span class="string">&quot;imdbSpider.pipelines.ListPipeline&quot;</span>: <span class="number">700</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="Crawl-Requirements"><a href="#Crawl-Requirements" class="headerlink" title="Crawl Requirements"></a>Crawl Requirements</h2><p>Firstly, let me to show you the project requirement  as following.</p>
+<p>Target crawk website: <a href="https://www.imdb.com/title/tt1877830">imd: The Batman</a></p>
+<center>
+        <img src="/2022/05/10/Scrapy-Manage-Multiple-Pipelines/imdb-the-batman.jpg" , width="80%">
+</center>
+
+<p>Target crawl text info:</p>
+<ul>
+<li><p>Text: title, rating, description</p>
+</li>
+<li><p>Image: image</p>
+</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://docs.scrapy.org/en/latest/intro/overview.html">1. Scrapy at a glance</a></p>
 ]]></content>
       <categories>
         <category>Big Data</category>
@@ -1695,54 +1738,6 @@
 <li><a href="https://segmentfault.com/a/1190000013178839">Scrapy框架简介</a></li>
 <li><a href="https://scrapy-chs.readthedocs.io/zh_CN/0.24/intro/overview.html">Scrapy官方文档</a></li>
 </ol>
-]]></content>
-      <categories>
-        <category>Big Data</category>
-      </categories>
-      <tags>
-        <tag>scrapy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Scrapy: Manage Multiple Pipelines</title>
-    <url>/2022/05/10/Scrapy-Manage-Multiple-Pipelines/</url>
-    <content><![CDATA[<p>It’s a common situation that managing multiple pipelines are required  when we try to develop some scrapy projects and decide the order of the pipelines. </p>
-<p>What’s worse, there may be not only one spider in the porject, and each  spider own different requirements to the project pipelines. And there is no doubt that <strong>effective management of pipelines can greatly improve our efficiency</strong> which is also the purpose of this article.</p>
-<center>
-    <img src="/2022/05/10/Scrapy-Manage-Multiple-Pipelines/logo.png" , width="80%">
-</center>
-<span id="more"></span>
-
-<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><p>To be more specific, I would love to share a software developing program situation appeared in my program developing process.</p>
-<p>When I tried to develop a scrapy project to crawl some data on the imdb website, which not only included the titles and release time, rating and other text data, but also contained the images data like movie posters, I found the a single item contains both.</p>
-<p>To solve this problem, of course, we can try to create different spiders which can crawl text data while the other can crawl image data. However, basing on our observation, this data can be crawled by only one spider if we can assemble a functional pipeline module.  Comparing to the first solution, this approach has several advantages:</p>
-<ul>
-<li>High Efficiency</li>
-<li>Code Modularization</li>
-<li>Easy to Debug</li>
-</ul>
-<h2 id="Understand-Pipeline-Module"><a href="#Understand-Pipeline-Module" class="headerlink" title="Understand Pipeline Module"></a>Understand Pipeline Module</h2><p>According to <a href="https://docs.scrapy.org/en/latest/topics/item-pipeline.html">scrapy document</a>, the pipeline is briefly descriped as: </p>
-<blockquote>
-<p>Item has been scraped by a spider, it is sent to the Item Pipeline which processes it through several components that are executed sequentially.</p>
-</blockquote>
-<p>As mentioned above, pipeline is designed to process the item data from spiders. And to achieve the designated function, we can try to assemble a number of pipelines in a specific order which is the key to  make a pipeline module to implement complex functions.</p>
-<p>As the following code shows, the “custom_setting” decided each pipelines’ order for item data.  In this way, we can make full use of the data contained in item.</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># For example</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MovieSpider</span>(scrapy.Spider):</span><br><span class="line">    name = <span class="string">&quot;list&quot;</span></span><br><span class="line">    allowed_domains = [<span class="string">&quot;imdb.com&quot;</span>]</span><br><span class="line">    start_urls = [<span class="string">&quot;https://www.imdb.com/title/tt4788734/&quot;</span>]</span><br><span class="line"></span><br><span class="line">    custom_settings = &#123;</span><br><span class="line">        <span class="string">&quot;ITEM_PIPELINES&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;imdbSpider.pipelines.InitSettingPipeline&quot;</span>: <span class="number">100</span>,</span><br><span class="line">            <span class="string">&quot;imdbSpider.pipelines.BannerPipeline&quot;</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="string">&quot;imdbSpider.pipelines.ImagePipeline&quot;</span>: <span class="number">400</span>,</span><br><span class="line">            <span class="string">&#x27;imdbSpider.pipelines.ProcessImagePipeline&#x27;</span>: <span class="number">500</span>,</span><br><span class="line">            <span class="string">&#x27;imdbSpider.pipelines.UploadPipeline&#x27;</span>: <span class="number">600</span>,</span><br><span class="line">            <span class="string">&quot;imdbSpider.pipelines.ListPipeline&quot;</span>: <span class="number">700</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><h2 id="Crawl-Requirements"><a href="#Crawl-Requirements" class="headerlink" title="Crawl Requirements"></a>Crawl Requirements</h2><p>Firstly, let me to show you the project requirement  as following.</p>
-<p>Target crawk website: <a href="https://www.imdb.com/title/tt1877830">imd: The Batman</a></p>
-<center>
-        <img src="/2022/05/10/Scrapy-Manage-Multiple-Pipelines/imdb-the-batman.jpg" , width="80%">
-</center>
-
-<p>Target crawl text info:</p>
-<ul>
-<li><p>Text: title, rating, description</p>
-</li>
-<li><p>Image: image</p>
-</li>
-</ul>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://docs.scrapy.org/en/latest/intro/overview.html">1. Scrapy at a glance</a></p>
 ]]></content>
       <categories>
         <category>Big Data</category>
