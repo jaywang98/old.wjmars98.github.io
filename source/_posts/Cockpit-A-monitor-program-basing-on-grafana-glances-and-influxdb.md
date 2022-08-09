@@ -13,12 +13,6 @@ A monitor project for server resources basing on glances, influxdb 1.7 and grafa
 
 <!--more-->
 
-A monitor project for server resources basing on glances, influxdb 1.7 and grafana 8.
-
-<center>
-    <img src="Cockpit-A-monitor-program-basing-on-grafana-glances-and-influxdb/cockpit-framwork.png" width="80%">
-</center>
-
 ## Environment
 > Python 3.9.4 <br>
 > Glances 3.2.7 <br>
