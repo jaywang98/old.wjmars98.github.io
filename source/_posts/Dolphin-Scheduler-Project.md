@@ -16,12 +16,6 @@ the ds-cluster building.
 
 <!-- more -->
 
-This purpose of this repo is to record some tricks and solutions during the process of
-the ds-cluster building.
-
-<center>
-   <img src="Dolphin-Scheduler-Project/ds_logo.png" width="80%">
-</center>
 ## Catalogue
 - [dolphinscheduler-project](#dolphinscheduler-project)
   - [Catalogue](#catalogue)
