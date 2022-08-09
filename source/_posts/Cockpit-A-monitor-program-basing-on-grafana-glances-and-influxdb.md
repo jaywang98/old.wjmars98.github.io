@@ -2,6 +2,7 @@
 title: Cockpit - A monitor program basing on grafana, glances and influxdb
 date: 2022-08-05 17:21:11
 tags:
+- Basic
 ---
 
 A monitor project for server resources basing on glances, influxdb 1.7 and grafana 8.
