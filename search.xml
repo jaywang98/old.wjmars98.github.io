@@ -718,6 +718,80 @@
 <li><a href="https://glances.readthedocs.io/en/latest/gw/influxdb.html">Glances, InfluxDB, Glances</a></li>
 </ol>
 ]]></content>
+      <tags>
+        <tag>Basic</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Dolphin Scheduler Project</title>
+    <url>/2022/08/09/Dolphin-Scheduler-Project/</url>
+    <content><![CDATA[<p>This purpose of this repo is to record some tricks and solutions during the process of<br>the ds-cluster building.</p>
+<center>
+   <img src="/2022/08/09/Dolphin-Scheduler-Project/ds_logo.png" width="80%">
+</center>
+
+<span id="more"></span>
+
+<p>This purpose of this repo is to record some tricks and solutions during the process of<br>the ds-cluster building.</p>
+<center>
+   <img src="/2022/08/09/Dolphin-Scheduler-Project/ds_logo.png" width="80%">
+</center>
+## Catalogue
+- [dolphinscheduler-project](#dolphinscheduler-project)
+  - [Catalogue](#catalogue)
+  - [Main DS Service Composition](#main-ds-service-composition)
+  - [Important Glossary](#important-glossary)
+  - [Build a Cluster](#build-a-cluster)
+    - [Configuration Information](#configuration-information)
+      - [1. Test Servers Info](#1-test-servers-info)
+      - [2. zookeeper](#2-zookeeper)
+      - [3. mysql](#3-mysql)
+      - [4. dolphin scheduler project](#4-dolphin-scheduler-project)
+      - [5. others](#5-others)
+
+
+<h2 id="Main-DS-Service-Composition"><a href="#Main-DS-Service-Composition" class="headerlink" title="Main DS Service Composition"></a>Main DS Service Composition</h2><p>DolphinScheduler mainly consists of five services: </p>
+<ul>
+<li>MasterServer：Mainly responsible for DAG segmentation and task status monitoring</li>
+<li>WorkerServer&#x2F;LoggerServer：Mainly responsible for the submission, execution and update of task status. LoggerServer is used for Rest Api to view logs through RPC</li>
+<li>ApiServer：Provides the Rest Api service for the UI to call</li>
+<li>AlertServer：Provide alarm service</li>
+<li>UI: Front page display</li>
+</ul>
+<h2 id="Important-Glossary"><a href="#Important-Glossary" class="headerlink" title="Important Glossary"></a>Important Glossary</h2><ul>
+<li><strong>Priority</strong>: Support the priority of process instances and task instances, if the priority of process instances and task instances is not set, the default is <strong>first-in-first-out</strong>.</li>
+<li><strong>Task&#x2F;Process Priority</strong>: When the number of <strong>worker&#x2F;process threads</strong> is insufficient, high-level tasks will be executed first in the execution queue, and tasks&#x2F;process with the same priority will be executed in the order of first in, first out.</li>
+<li><strong>Failure Strategy</strong>: notification strategy, process priority, worker group, notification group, recipient, and CC are the same as workflow running parameters.</li>
+<li><strong>SubProcess</strong>: The sub-process node is to execute a certain external workflow definition as a task node.</li>
+</ul>
+<h2 id="Build-a-Cluster"><a href="#Build-a-Cluster" class="headerlink" title="Build a Cluster"></a>Build a Cluster</h2><h3 id="Configuration-Information"><a href="#Configuration-Information" class="headerlink" title="Configuration Information"></a>Configuration Information</h3><h4 id="1-Test-Servers-Info"><a href="#1-Test-Servers-Info" class="headerlink" title="1. Test Servers Info"></a>1. Test Servers Info</h4><ul>
+<li>backend-pulsar-101</li>
+<li>backend-pulsar-102</li>
+<li>backend-pulsar-103</li>
+</ul>
+<h4 id="2-zookeeper"><a href="#2-zookeeper" class="headerlink" title="2. zookeeper"></a>2. zookeeper</h4><p>version：3.7.1</p>
+<ul>
+<li>leader: backend-pulsar-102</li>
+<li>follower: backend-pulsar-101, backend-pulsar-103</li>
+</ul>
+<h4 id="3-mysql"><a href="#3-mysql" class="headerlink" title="3. mysql"></a>3. mysql</h4><p>version：8.0<br>Depoy on the docker on the <em>backend-pulsar-101</em> server. </p>
+<blockquote>
+<p>Due to ds meta data are stored in the database, it’s recommended that the mysql database should be built in the cluster server or the server which owns the <strong>low latency</strong> to the ds cluster. Otherwise, the io, ui and so on of ds cluster will be badly affected.</p>
+</blockquote>
+<center>
+   <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_mysql.png" width="80%">
+</center>
+
+<h4 id="4-dolphin-scheduler-project"><a href="#4-dolphin-scheduler-project" class="headerlink" title="4. dolphin scheduler project"></a>4. dolphin scheduler project</h4><p>ds version: 2.0.5</p>
+<center>
+   <img src="/2022/08/09/Dolphin-Scheduler-Project/ds_services.png" width="80%">
+</center>
+
+<h4 id="5-others"><a href="#5-others" class="headerlink" title="5. others"></a>5. others</h4><p>configuration:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">The directory to install DolphinScheduler <span class="keyword">for</span> all machine we config above. It will automatically be created by `install.sh` script <span class="keyword">if</span> not exists.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Do not <span class="built_in">set</span> this configuration same as the current path (<span class="built_in">pwd</span>)</span></span><br><span class="line">installPath=&quot;/data1_1T/dolphinscheduler&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Log path</span></span><br><span class="line">logpath=&quot;/data1_1T/dolphinscheduler/logs&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">The directory to store <span class="built_in">local</span> data <span class="keyword">for</span> all machine we config above. Make sure user `deployUser` have permissions to <span class="built_in">read</span> and write this directory.</span></span><br><span class="line">dataBasedirPath=&quot;/tmp/dolphinscheduler&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">resource store on HDFS/S3 path, resource file will store to this hdfs path, self configuration, please make sure the directory exists on hdfs and has <span class="built_in">read</span> write permissions. <span class="string">&quot;/dolphinscheduler&quot;</span> is recommended</span></span><br><span class="line">resourceUploadPath=&quot;/dolphinscheduler&quot;</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>Big Data</tag>
+      </tags>
   </entry>
   <entry>
     <title>Brew</title>
