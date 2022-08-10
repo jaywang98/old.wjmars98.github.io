@@ -17,17 +17,17 @@ the ds-cluster building.
 <!-- more -->
 
 ## Catalogue
-- [dolphinscheduler-project](#dolphinscheduler-project)
-  - [Catalogue](#catalogue)
-  - [Main DS Service Composition](#main-ds-service-composition)
-  - [Important Glossary](#important-glossary)
-  - [Build a Cluster](#build-a-cluster)
-    - [Configuration Information](#configuration-information)
-      - [1. Test Servers Info](#1-test-servers-info)
-      - [2. zookeeper](#2-zookeeper)
-      - [3. mysql](#3-mysql)
-      - [4. dolphin scheduler project](#4-dolphin-scheduler-project)
-      - [5. others](#5-others)
+- [Catalogue](#catalogue)
+- [Main DS Service Composition](#main-ds-service-composition)
+- [Important Glossary](#important-glossary)
+- [Build a Cluster](#build-a-cluster)
+  - [Configuration Information](#configuration-information)
+    - [1. Test Servers Info](#1-test-servers-info)
+    - [2. zookeeper](#2-zookeeper)
+    - [3. mysql](#3-mysql)
+    - [4. dolphin scheduler project](#4-dolphin-scheduler-project)
+    - [5. others](#5-others)
+  - [_aso-alert_ project deployment test](#aso-alert-project-deployment-test)
 
 
 ## Main DS Service Composition
@@ -91,3 +91,54 @@ dataBasedirPath="/tmp/dolphinscheduler"
 # resource store on HDFS/S3 path, resource file will store to this hdfs path, self configuration, please make sure the directory exists on hdfs and has read write permissions. "/dolphinscheduler" is recommended
 resourceUploadPath="/dolphinscheduler"
 ```
+
+### _aso-alert_ project deployment test
+1. worker group
+   
+DS is allowed to divide workers to organize as work group, and appoint related task executed on specific group.
+
+User need to configure the required environment (such as JAVA_HOME, PYTHON_HOME and so on) in the group to support the program.
+
+   
+2. environment manage
+
+I used pyenv and virtualenv to install the python3.9.4, and ds allow user to export environment variables configs in ui, as shown in following pic.
+
+   
+<center>
+   <img src="Dolphin-Scheduler-Project/stat_ds_env.png" width="80%">
+</center>
+
+3. resources
+
+To run alert project, related resources need to be uploaded. Resources -> upload.
+
+>   __Attention__:
+> 1. DS 2.0.5 only support upload file level resources and batch upload method is not allowed currently.
+>  Also, if user selects local-storage method for resource, only upoload resource on ui or api are valid,copying file to the target server folder will not map to the meta database.
+> 2. There is a bug in DS 2.0.5 that process cannot find the resource, which may be caused by server saving the upload resources in the error local storage path.
+> Please check it in the server or reupload the resource.
+
+   - Server：
+      <center>
+         <img src="Dolphin-Scheduler-Project/stat_store_local.png" width="80%">
+      </center>
+   - ui：
+   <center>
+      <img src="Dolphin-Scheduler-Project/stat_store_ui.png" width="80%">
+   </center>
+
+   - DAG
+      <center>
+         <img src="Dolphin-Scheduler-Project/stat_dags.png" width="80%">
+      </center>
+
+   - Task
+      <center>
+         <img src="Dolphin-Scheduler-Project/stat_online.png" width="80%">
+      </center>
+   
+   - Log
+      <center>
+         <img src="Dolphin-Scheduler-Project/stat_run_log.png" width="80%">
+      </center>
