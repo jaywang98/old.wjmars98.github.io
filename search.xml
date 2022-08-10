@@ -911,11 +911,17 @@
 <li><p><em>cat &#x2F;etc&#x2F;hosts</em>: ip map</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">178.128.123.18 backend-pulsar-101</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">128.199.160.80 backend-pulsar-102</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">143.198.195.83 backend-pulsar-103</span></span><br><span class="line">10.130.144.26 backend-pulsar-101</span><br><span class="line">10.130.145.44 backend-pulsar-102</span><br><span class="line">10.130.144.31 backend-pulsar-103</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><em>conf&#x2F;common.properties</em>: dolphinscheduler<br>&#96;&#96;&#96;shell</p>
+<li><p><em>conf&#x2F;common.properties</em>: dolphinscheduler register ip in zookeeper<br>&#96;&#96;&#96;shell</p>
 <h1 id="network-interface-preferred-like-eth0-default-empty"><a href="#network-interface-preferred-like-eth0-default-empty" class="headerlink" title="network interface preferred like eth0, default: empty"></a>network interface preferred like eth0, default: empty</h1><p>dolphin.scheduler.network.interface.preferred&#x3D;eth1</p>
 </li>
 </ol>
 <h1 id="network-IP-gets-priority-default-inner-outer"><a href="#network-IP-gets-priority-default-inner-outer" class="headerlink" title="network IP gets priority, default: inner outer"></a>network IP gets priority, default: inner outer</h1><p>dolphin.scheduler.network.priority.strategy&#x3D;outer</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a href="https://dolphinscheduler.apache.org/en-us/docs/2.0.5/user_doc/guide/installation/docker.html">Dolphinscheduler(2.0.5) docker deploy</a></li>
+<li><a href="https://programmersought.com/article/432910485874/">ProgrammerSought: dolphinscheduler-2.0.3</a></li>
+<li><a href="https://www.its203.com/article/yj970605/121029526">Dolphinscheduler + Mysql搭建部署</a></li>
+<li><a href="https://blog.csdn.net/weixin_37681466/article/details/123126799">Dolphinscheduler 上传文件出现租户不存在的问题</a></li>
+</ol>
 ]]></content>
       <tags>
         <tag>Big Data</tag>
