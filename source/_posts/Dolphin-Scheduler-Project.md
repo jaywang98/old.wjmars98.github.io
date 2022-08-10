@@ -28,6 +28,16 @@ the ds-cluster building.
     - [4. dolphin scheduler project](#4-dolphin-scheduler-project)
     - [5. others](#5-others)
   - [_aso-alert_ project deployment test](#aso-alert-project-deployment-test)
+- [Problem And Solution](#problem-and-solution)
+  - [1. Telant dosen't exist](#1-telant-dosent-exist)
+  - [2. Datasource fail to connect mysql](#2-datasource-fail-to-connect-mysql)
+    - [(Pseudo) cluster](#pseudo-cluster)
+    - [Docker，K8s](#dockerk8s)
+  - [3. Storage Not Enabled](#3-storage-not-enabled)
+    - [1. K8s:](#1-k8s)
+    - [2. Cluster](#2-cluster)
+  - [4. work group default have not received the heartbeat](#4-work-group-default-have-not-received-the-heartbeat)
+- [Reference](#reference)
 
 
 ## Main DS Service Composition
@@ -337,7 +347,7 @@ dolphin.scheduler.network.interface.preferred=eth1
 
 # network IP gets priority, default: inner outer
 dolphin.scheduler.network.priority.strategy=outer
-
+```
 
 ## Reference
 1. [Dolphinscheduler(2.0.5) docker deploy](https://dolphinscheduler.apache.org/en-us/docs/2.0.5/user_doc/guide/installation/docker.html)
