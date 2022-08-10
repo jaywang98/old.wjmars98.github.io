@@ -743,6 +743,22 @@
 <li><a href="#aso-alert-project-deployment-test"><em>aso-alert</em> project deployment test</a></li>
 </ul>
 </li>
+<li><a href="#problem-and-solution">Problem And Solution</a><ul>
+<li><a href="#1-telant-dosent-exist">1. Telant dosen’t exist</a></li>
+<li><a href="#2-datasource-fail-to-connect-mysql">2. Datasource fail to connect mysql</a><ul>
+<li><a href="#pseudo-cluster">(Pseudo) cluster</a></li>
+<li><a href="#dockerk8s">Docker，K8s</a></li>
+</ul>
+</li>
+<li><a href="#3-storage-not-enabled">3. Storage Not Enabled</a><ul>
+<li><a href="#1-k8s">1. K8s:</a></li>
+<li><a href="#2-cluster">2. Cluster</a></li>
+</ul>
+</li>
+<li><a href="#4-work-group-default-have-not-received-the-heartbeat">4. work group default have not received the heartbeat</a></li>
+</ul>
+</li>
+<li><a href="#reference">Reference</a></li>
 </ul>
 <h2 id="Main-DS-Service-Composition"><a href="#Main-DS-Service-Composition" class="headerlink" title="Main DS Service Composition"></a>Main DS Service Composition</h2><p>DolphinScheduler mainly consists of five services: </p>
 <ul>
@@ -911,11 +927,9 @@
 <li><p><em>cat &#x2F;etc&#x2F;hosts</em>: ip map</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-- backend-pulsar-101</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-- backend-pulsar-102</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-- backend-pulsar-103</span></span><br><span class="line">-- backend-pulsar-101</span><br><span class="line">-- backend-pulsar-102</span><br><span class="line">-- backend-pulsar-103</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><em>conf&#x2F;common.properties</em>: dolphinscheduler register ip in zookeeper<br>&#96;&#96;&#96;shell</p>
-<h1 id="network-interface-preferred-like-eth0-default-empty"><a href="#network-interface-preferred-like-eth0-default-empty" class="headerlink" title="network interface preferred like eth0, default: empty"></a>network interface preferred like eth0, default: empty</h1><p>dolphin.scheduler.network.interface.preferred&#x3D;eth1</p>
-</li>
+<li><p><em>conf&#x2F;common.properties</em>: dolphinscheduler register ip in zookeeper</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">network interface preferred like eth0, default: empty</span></span><br><span class="line">dolphin.scheduler.network.interface.preferred=eth1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">network IP gets priority, default: inner outer</span></span><br><span class="line">dolphin.scheduler.network.priority.strategy=outer</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h1 id="network-IP-gets-priority-default-inner-outer"><a href="#network-IP-gets-priority-default-inner-outer" class="headerlink" title="network IP gets priority, default: inner outer"></a>network IP gets priority, default: inner outer</h1><p>dolphin.scheduler.network.priority.strategy&#x3D;outer</p>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
 <li><a href="https://dolphinscheduler.apache.org/en-us/docs/2.0.5/user_doc/guide/installation/docker.html">Dolphinscheduler(2.0.5) docker deploy</a></li>
 <li><a href="https://programmersought.com/article/432910485874/">ProgrammerSought: dolphinscheduler-2.0.3</a></li>
@@ -1136,6 +1150,43 @@
       </tags>
   </entry>
   <entry>
+    <title>Intership Appsflyer</title>
+    <url>/2022/04/18/Intership%20Appsflyer/</url>
+    <content><![CDATA[<p>AppsFlyer是以色列公司APPSFLYER LTD旗下移动归因与营销分析平台品牌。目标是帮助应用营销人员做出决策。</p>
+<center>
+        <img src="/2022/04/18/Intership%20Appsflyer/appsflyer.png" width="80%">
+</center>
+
+<span id="more"></span>
+
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>AppsFlyer（以下简称AF）是SaaS移动营销分析和归因平台（类似国内的友盟），总部位于加利福尼亚州的旧金山。出海的应用或多或少都会用到。</p>
+<p>所谓归因就是找到事件发生的原因。通常的说法就是，用户安装了你的App，是因为哪个广告带来的效果。</p>
+<h1 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h1><p><strong>Organic Install 自然量安装</strong><br>指的是不需要你的推广，用户自发的下载并安装了你的应用。</p>
+<p><strong>Non-Organic Install 非自然量安装</strong><br>指的是你通过某些广告点击跳转到App下载的界面下载并安装的。非自然量安装主要是广告商给你带来的，是你早期流量的来源，应该重点关注的。</p>
+<p><strong>Impression 广告的曝光或展示</strong></p>
+<p><strong>Conversion Rate(CVR) 转化率</strong><br>non-organic installs 除以广告点击数。</p>
+<p><strong>Attribution</strong> 归因<br>追溯应用安装和其他事件的源头，确定是哪个渠道最终导致某一激活或者应用内事件的发生。</p>
+<p><strong>Multi-touch Attribution 多源归因</strong><br>传统的归因把事件发生的全部功劳都归于产生最后一次点击的渠道，多源归因会考虑在这之前也产生了点击的其他渠道，因为他们对事件的发生也起到了推动作用。</p>
+<p><strong>Assisted Installs 辅助性安装</strong><br>在一个 non-organic install 转化的过程中，假设用户分别点击了渠道A，渠道B 和渠道C 的广告，然后进行下载并激活应用; 那么渠道A 和B 就各自贡献一个辅助性安装(assisted install)。</p>
+<p><strong>Re-engagement</strong><br>广告类型的主要目标是为了增加已有用户的活跃性，提醒用户更加频繁的体验应用。</p>
+<p><strong>Re-targeting 重定向或再营销</strong><br>针对那些已经安装但又卸载了应用的用户的广告类型，为的是调动这部分用户重新安装应用。</p>
+<p><strong>Revenue 应用收入</strong><br>统计时间区间内新增用户至今为止产生的收益，而收益的统计依赖于应用内事件(in-app event)埋点设置。例如您如果对事件A 和事件B 设置了收益，那么Revenue 最终呈现的就是对应选中的那部分用户至今为止在事件A 和事件B 的收益总和。</p>
+<p><strong>Life-Time Value(LTV) 生命周期价值</strong><br>用户在整个生命周期中给广告主带来的总价值。</p>
+<p><strong>Session 应用开启</strong><br>定义忠实用户和计算留存等的依据。</p>
+<p><strong>ARPU (AverageRevenue per User) 每个用户平均产生的收益</strong><br>Revenue 除以激活用户数。</p>
+<p><strong>DeepLink 深度链接</strong><br>可以直达网站或者应用中某个特定页面的链接，比如可以直接打开手机上的淘宝应用，并跳转到某个商品的详情页。</p>
+<p><strong>Media Source 媒体源</strong><br> 进行服务器对服务器对接的渠道统称为媒体源(Media Source)，这些媒体源可以是publisher,移动广告平台和移动广告网盟等。</p>
+<p> <strong>In-app Event 应用内事件</strong><br> 在AppsFlyer 平台上分析用户行为的基础。通过在接入AppsFlyer SDK 时对关注的事件(e.g. 购买，充值和注册等)添加对应代码，便可实现对用户从激活到整个生命周期的追踪和分析。</p>
+]]></content>
+      <categories>
+        <category>Intership</category>
+      </categories>
+      <tags>
+        <tag>intership</tag>
+        <tag>ads</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Internship Fetch Data</title>
     <url>/2022/04/14/Internship%20Fetch%20Data/</url>
     <content><![CDATA[<p>在实习的前两个星期，感觉最常接触的一类任务就是<strong>数据的拉取</strong>以及api的调用，本文也是对这个part的内容、方法以及遇到的问题进行一个记录。</p>
@@ -1293,43 +1344,6 @@
       <tags>
         <tag>intership</tag>
         <tag>http</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Intership Appsflyer</title>
-    <url>/2022/04/18/Intership%20Appsflyer/</url>
-    <content><![CDATA[<p>AppsFlyer是以色列公司APPSFLYER LTD旗下移动归因与营销分析平台品牌。目标是帮助应用营销人员做出决策。</p>
-<center>
-        <img src="/2022/04/18/Intership%20Appsflyer/appsflyer.png" width="80%">
-</center>
-
-<span id="more"></span>
-
-<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>AppsFlyer（以下简称AF）是SaaS移动营销分析和归因平台（类似国内的友盟），总部位于加利福尼亚州的旧金山。出海的应用或多或少都会用到。</p>
-<p>所谓归因就是找到事件发生的原因。通常的说法就是，用户安装了你的App，是因为哪个广告带来的效果。</p>
-<h1 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h1><p><strong>Organic Install 自然量安装</strong><br>指的是不需要你的推广，用户自发的下载并安装了你的应用。</p>
-<p><strong>Non-Organic Install 非自然量安装</strong><br>指的是你通过某些广告点击跳转到App下载的界面下载并安装的。非自然量安装主要是广告商给你带来的，是你早期流量的来源，应该重点关注的。</p>
-<p><strong>Impression 广告的曝光或展示</strong></p>
-<p><strong>Conversion Rate(CVR) 转化率</strong><br>non-organic installs 除以广告点击数。</p>
-<p><strong>Attribution</strong> 归因<br>追溯应用安装和其他事件的源头，确定是哪个渠道最终导致某一激活或者应用内事件的发生。</p>
-<p><strong>Multi-touch Attribution 多源归因</strong><br>传统的归因把事件发生的全部功劳都归于产生最后一次点击的渠道，多源归因会考虑在这之前也产生了点击的其他渠道，因为他们对事件的发生也起到了推动作用。</p>
-<p><strong>Assisted Installs 辅助性安装</strong><br>在一个 non-organic install 转化的过程中，假设用户分别点击了渠道A，渠道B 和渠道C 的广告，然后进行下载并激活应用; 那么渠道A 和B 就各自贡献一个辅助性安装(assisted install)。</p>
-<p><strong>Re-engagement</strong><br>广告类型的主要目标是为了增加已有用户的活跃性，提醒用户更加频繁的体验应用。</p>
-<p><strong>Re-targeting 重定向或再营销</strong><br>针对那些已经安装但又卸载了应用的用户的广告类型，为的是调动这部分用户重新安装应用。</p>
-<p><strong>Revenue 应用收入</strong><br>统计时间区间内新增用户至今为止产生的收益，而收益的统计依赖于应用内事件(in-app event)埋点设置。例如您如果对事件A 和事件B 设置了收益，那么Revenue 最终呈现的就是对应选中的那部分用户至今为止在事件A 和事件B 的收益总和。</p>
-<p><strong>Life-Time Value(LTV) 生命周期价值</strong><br>用户在整个生命周期中给广告主带来的总价值。</p>
-<p><strong>Session 应用开启</strong><br>定义忠实用户和计算留存等的依据。</p>
-<p><strong>ARPU (AverageRevenue per User) 每个用户平均产生的收益</strong><br>Revenue 除以激活用户数。</p>
-<p><strong>DeepLink 深度链接</strong><br>可以直达网站或者应用中某个特定页面的链接，比如可以直接打开手机上的淘宝应用，并跳转到某个商品的详情页。</p>
-<p><strong>Media Source 媒体源</strong><br> 进行服务器对服务器对接的渠道统称为媒体源(Media Source)，这些媒体源可以是publisher,移动广告平台和移动广告网盟等。</p>
-<p> <strong>In-app Event 应用内事件</strong><br> 在AppsFlyer 平台上分析用户行为的基础。通过在接入AppsFlyer SDK 时对关注的事件(e.g. 购买，充值和注册等)添加对应代码，便可实现对用户从激活到整个生命周期的追踪和分析。</p>
-]]></content>
-      <categories>
-        <category>Intership</category>
-      </categories>
-      <tags>
-        <tag>intership</tag>
-        <tag>ads</tag>
       </tags>
   </entry>
   <entry>
