@@ -330,10 +330,17 @@ __Solution:__
 10.130.144.31 backend-pulsar-103
 ```
 
-1. _conf/common.properties_: dolphinscheduler
+3. _conf/common.properties_: dolphinscheduler register ip in zookeeper
 ```shell
 # network interface preferred like eth0, default: empty
 dolphin.scheduler.network.interface.preferred=eth1
 
 # network IP gets priority, default: inner outer
 dolphin.scheduler.network.priority.strategy=outer
+
+
+## Reference
+1. [Dolphinscheduler(2.0.5) docker deploy](https://dolphinscheduler.apache.org/en-us/docs/2.0.5/user_doc/guide/installation/docker.html)
+2. [ProgrammerSought: dolphinscheduler-2.0.3](https://programmersought.com/article/432910485874/)
+3. [Dolphinscheduler + Mysql搭建部署](https://www.its203.com/article/yj970605/121029526)
+4. [Dolphinscheduler 上传文件出现租户不存在的问题](https://blog.csdn.net/weixin_37681466/article/details/123126799)
