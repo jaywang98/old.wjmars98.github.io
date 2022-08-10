@@ -31,8 +31,14 @@
 <meta property="og:image" content="http://example.com/2022/08/09/Dolphin-Scheduler-Project/ds_logo.png">
 <meta property="og:image" content="http://example.com/2022/08/09/Dolphin-Scheduler-Project/stat_mysql.png">
 <meta property="og:image" content="http://example.com/2022/08/09/Dolphin-Scheduler-Project/ds_services.png">
+<meta property="og:image" content="http://example.com/2022/08/09/Dolphin-Scheduler-Project/stat_ds_env.png">
+<meta property="og:image" content="http://example.com/2022/08/09/Dolphin-Scheduler-Project/stat_store_local.png">
+<meta property="og:image" content="http://example.com/2022/08/09/Dolphin-Scheduler-Project/stat_store_ui.png">
+<meta property="og:image" content="http://example.com/2022/08/09/Dolphin-Scheduler-Project/stat_dags.png">
+<meta property="og:image" content="http://example.com/2022/08/09/Dolphin-Scheduler-Project/stat_online.png">
+<meta property="og:image" content="http://example.com/2022/08/09/Dolphin-Scheduler-Project/stat_run_log.png">
 <meta property="article:published_time" content="2022-08-09T06:11:47.000Z">
-<meta property="article:modified_time" content="2022-08-09T06:21:33.602Z">
+<meta property="article:modified_time" content="2022-08-10T02:46:56.310Z">
 <meta property="article:author" content="Mars Wang">
 <meta property="article:tag" content="Big Data">
 <meta name="twitter:card" content="summary">
@@ -220,10 +226,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-08-09 14:11:47 / 修改时间：14:21:33" itemprop="dateCreated datePublished" datetime="2022-08-09T14:11:47+08:00">2022-08-09</time>
+              <time title="创建时间：2022-08-09 14:11:47" itemprop="dateCreated datePublished" datetime="2022-08-09T14:11:47+08:00">2022-08-09</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-08-10 10:46:56" itemprop="dateModified" datetime="2022-08-10T10:46:56+08:00">2022-08-10</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -251,7 +263,6 @@
 <span id="more"></span>
 
 <h2 id="Catalogue"><a href="#Catalogue" class="headerlink" title="Catalogue"></a>Catalogue</h2><ul>
-<li><a href="#dolphinscheduler-project">dolphinscheduler-project</a><ul>
 <li><a href="#catalogue">Catalogue</a></li>
 <li><a href="#main-ds-service-composition">Main DS Service Composition</a></li>
 <li><a href="#important-glossary">Important Glossary</a></li>
@@ -264,8 +275,7 @@
 <li><a href="#5-others">5. others</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li><a href="#aso-alert-project-deployment-test"><em>aso-alert</em> project deployment test</a></li>
 </ul>
 </li>
 </ul>
@@ -308,6 +318,57 @@
 
 <h4 id="5-others"><a href="#5-others" class="headerlink" title="5. others"></a>5. others</h4><p>configuration:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">The directory to install DolphinScheduler <span class="keyword">for</span> all machine we config above. It will automatically be created by `install.sh` script <span class="keyword">if</span> not exists.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Do not <span class="built_in">set</span> this configuration same as the current path (<span class="built_in">pwd</span>)</span></span><br><span class="line">installPath=&quot;/data1_1T/dolphinscheduler&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Log path</span></span><br><span class="line">logpath=&quot;/data1_1T/dolphinscheduler/logs&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">The directory to store <span class="built_in">local</span> data <span class="keyword">for</span> all machine we config above. Make sure user `deployUser` have permissions to <span class="built_in">read</span> and write this directory.</span></span><br><span class="line">dataBasedirPath=&quot;/tmp/dolphinscheduler&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">resource store on HDFS/S3 path, resource file will store to this hdfs path, self configuration, please make sure the directory exists on hdfs and has <span class="built_in">read</span> write permissions. <span class="string">&quot;/dolphinscheduler&quot;</span> is recommended</span></span><br><span class="line">resourceUploadPath=&quot;/dolphinscheduler&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="aso-alert-project-deployment-test"><a href="#aso-alert-project-deployment-test" class="headerlink" title="aso-alert project deployment test"></a><em>aso-alert</em> project deployment test</h3><ol>
+<li>worker group</li>
+</ol>
+<p>DS is allowed to divide workers to organize as work group, and appoint related task executed on specific group.</p>
+<p>User need to configure the required environment (such as JAVA_HOME, PYTHON_HOME and so on) in the group to support the program.</p>
+<ol start="2">
+<li>environment manage</li>
+</ol>
+<p>I used pyenv and virtualenv to install the python3.9.4, and ds allow user to export environment variables configs in ui, as shown in following pic.</p>
+<center>
+   <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_ds_env.png" width="80%">
+</center>
+
+<ol start="3">
+<li>resources</li>
+</ol>
+<p>To run alert project, related resources need to be uploaded. Resources -&gt; upload.</p>
+<blockquote>
+<p>  <strong>Attention</strong>:</p>
+<ol>
+<li>DS 2.0.5 only support upload file level resources and batch upload method is not allowed currently.<br> Also, if user selects local-storage method for resource, only upoload resource on ui or api are valid,copying file to the target server folder will not map to the meta database.</li>
+<li>There is a bug in DS 2.0.5 that process cannot find the resource, which may be caused by server saving the upload resources in the error local storage path.<br>Please check it in the server or reupload the resource.</li>
+</ol>
+</blockquote>
+<ul>
+<li><p>Server：</p>
+ <center>
+    <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_store_local.png" width="80%">
+ </center></li>
+<li><p>ui：</p>
+   <center>
+ <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_store_ui.png" width="80%">
+   </center>
+</li>
+<li><p>DAG</p>
+ <center>
+    <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_dags.png" width="80%">
+ </center>
+</li>
+<li><p>Task</p>
+ <center>
+    <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_online.png" width="80%">
+ </center>
+</li>
+<li><p>Log</p>
+ <center>
+    <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_run_log.png" width="80%">
+ </center></li>
+</ul>
+
     </div>
 
     
@@ -388,7 +449,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Catalogue"><span class="nav-number">1.</span> <span class="nav-text">Catalogue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Main-DS-Service-Composition"><span class="nav-number">2.</span> <span class="nav-text">Main DS Service Composition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Important-Glossary"><span class="nav-number">3.</span> <span class="nav-text">Important Glossary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-a-Cluster"><span class="nav-number">4.</span> <span class="nav-text">Build a Cluster</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Configuration-Information"><span class="nav-number">4.1.</span> <span class="nav-text">Configuration Information</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Test-Servers-Info"><span class="nav-number">4.1.1.</span> <span class="nav-text">1. Test Servers Info</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-zookeeper"><span class="nav-number">4.1.2.</span> <span class="nav-text">2. zookeeper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-mysql"><span class="nav-number">4.1.3.</span> <span class="nav-text">3. mysql</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-dolphin-scheduler-project"><span class="nav-number">4.1.4.</span> <span class="nav-text">4. dolphin scheduler project</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-others"><span class="nav-number">4.1.5.</span> <span class="nav-text">5. others</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Catalogue"><span class="nav-number">1.</span> <span class="nav-text">Catalogue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Main-DS-Service-Composition"><span class="nav-number">2.</span> <span class="nav-text">Main DS Service Composition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Important-Glossary"><span class="nav-number">3.</span> <span class="nav-text">Important Glossary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Build-a-Cluster"><span class="nav-number">4.</span> <span class="nav-text">Build a Cluster</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Configuration-Information"><span class="nav-number">4.1.</span> <span class="nav-text">Configuration Information</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Test-Servers-Info"><span class="nav-number">4.1.1.</span> <span class="nav-text">1. Test Servers Info</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-zookeeper"><span class="nav-number">4.1.2.</span> <span class="nav-text">2. zookeeper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-mysql"><span class="nav-number">4.1.3.</span> <span class="nav-text">3. mysql</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-dolphin-scheduler-project"><span class="nav-number">4.1.4.</span> <span class="nav-text">4. dolphin scheduler project</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-others"><span class="nav-number">4.1.5.</span> <span class="nav-text">5. others</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aso-alert-project-deployment-test"><span class="nav-number">4.2.</span> <span class="nav-text">aso-alert project deployment test</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

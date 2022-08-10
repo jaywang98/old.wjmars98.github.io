@@ -728,7 +728,6 @@
 <span id="more"></span>
 
 <h2 id="Catalogue"><a href="#Catalogue" class="headerlink" title="Catalogue"></a>Catalogue</h2><ul>
-<li><a href="#dolphinscheduler-project">dolphinscheduler-project</a><ul>
 <li><a href="#catalogue">Catalogue</a></li>
 <li><a href="#main-ds-service-composition">Main DS Service Composition</a></li>
 <li><a href="#important-glossary">Important Glossary</a></li>
@@ -741,8 +740,7 @@
 <li><a href="#5-others">5. others</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li><a href="#aso-alert-project-deployment-test"><em>aso-alert</em> project deployment test</a></li>
 </ul>
 </li>
 </ul>
@@ -784,7 +782,58 @@
 </center>
 
 <h4 id="5-others"><a href="#5-others" class="headerlink" title="5. others"></a>5. others</h4><p>configuration:</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">The directory to install DolphinScheduler <span class="keyword">for</span> all machine we config above. It will automatically be created by `install.sh` script <span class="keyword">if</span> not exists.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Do not <span class="built_in">set</span> this configuration same as the current path (<span class="built_in">pwd</span>)</span></span><br><span class="line">installPath=&quot;/data1_1T/dolphinscheduler&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Log path</span></span><br><span class="line">logpath=&quot;/data1_1T/dolphinscheduler/logs&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">The directory to store <span class="built_in">local</span> data <span class="keyword">for</span> all machine we config above. Make sure user `deployUser` have permissions to <span class="built_in">read</span> and write this directory.</span></span><br><span class="line">dataBasedirPath=&quot;/tmp/dolphinscheduler&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">resource store on HDFS/S3 path, resource file will store to this hdfs path, self configuration, please make sure the directory exists on hdfs and has <span class="built_in">read</span> write permissions. <span class="string">&quot;/dolphinscheduler&quot;</span> is recommended</span></span><br><span class="line">resourceUploadPath=&quot;/dolphinscheduler&quot;</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">The directory to install DolphinScheduler <span class="keyword">for</span> all machine we config above. It will automatically be created by `install.sh` script <span class="keyword">if</span> not exists.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Do not <span class="built_in">set</span> this configuration same as the current path (<span class="built_in">pwd</span>)</span></span><br><span class="line">installPath=&quot;/data1_1T/dolphinscheduler&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Log path</span></span><br><span class="line">logpath=&quot;/data1_1T/dolphinscheduler/logs&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">The directory to store <span class="built_in">local</span> data <span class="keyword">for</span> all machine we config above. Make sure user `deployUser` have permissions to <span class="built_in">read</span> and write this directory.</span></span><br><span class="line">dataBasedirPath=&quot;/tmp/dolphinscheduler&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">resource store on HDFS/S3 path, resource file will store to this hdfs path, self configuration, please make sure the directory exists on hdfs and has <span class="built_in">read</span> write permissions. <span class="string">&quot;/dolphinscheduler&quot;</span> is recommended</span></span><br><span class="line">resourceUploadPath=&quot;/dolphinscheduler&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="aso-alert-project-deployment-test"><a href="#aso-alert-project-deployment-test" class="headerlink" title="aso-alert project deployment test"></a><em>aso-alert</em> project deployment test</h3><ol>
+<li>worker group</li>
+</ol>
+<p>DS is allowed to divide workers to organize as work group, and appoint related task executed on specific group.</p>
+<p>User need to configure the required environment (such as JAVA_HOME, PYTHON_HOME and so on) in the group to support the program.</p>
+<ol start="2">
+<li>environment manage</li>
+</ol>
+<p>I used pyenv and virtualenv to install the python3.9.4, and ds allow user to export environment variables configs in ui, as shown in following pic.</p>
+<center>
+   <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_ds_env.png" width="80%">
+</center>
+
+<ol start="3">
+<li>resources</li>
+</ol>
+<p>To run alert project, related resources need to be uploaded. Resources -&gt; upload.</p>
+<blockquote>
+<p>  <strong>Attention</strong>:</p>
+<ol>
+<li>DS 2.0.5 only support upload file level resources and batch upload method is not allowed currently.<br> Also, if user selects local-storage method for resource, only upoload resource on ui or api are valid,copying file to the target server folder will not map to the meta database.</li>
+<li>There is a bug in DS 2.0.5 that process cannot find the resource, which may be caused by server saving the upload resources in the error local storage path.<br>Please check it in the server or reupload the resource.</li>
+</ol>
+</blockquote>
+<ul>
+<li><p>Server：</p>
+ <center>
+    <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_store_local.png" width="80%">
+ </center></li>
+<li><p>ui：</p>
+   <center>
+ <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_store_ui.png" width="80%">
+   </center>
+</li>
+<li><p>DAG</p>
+ <center>
+    <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_dags.png" width="80%">
+ </center>
+</li>
+<li><p>Task</p>
+ <center>
+    <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_online.png" width="80%">
+ </center>
+</li>
+<li><p>Log</p>
+ <center>
+    <img src="/2022/08/09/Dolphin-Scheduler-Project/stat_run_log.png" width="80%">
+ </center></li>
+</ul>
+]]></content>
       <tags>
         <tag>Big Data</tag>
       </tags>
@@ -873,6 +922,47 @@
       </tags>
   </entry>
   <entry>
+    <title>Image Fingerprint</title>
+    <url>/2022/06/07/Image_Fingerprint/</url>
+    <content><![CDATA[<p>When I tried to build a database for images, a parameter was required to designed for the identification of each image. </p>
+<p>In this article, I explored how to establish the fingerprint of each image by combining its<br>image dhash code and text hash code.</p>
+<center>
+        <img src="/2022/06/07/Image_Fingerprint/image_fingerprint_logo.jpg" width="80%">
+</center>
+
+
+<span id="more"></span>
+
+<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><p>The fingerprint wsa needed when I tried to establish my database for images. This database not only should be able to<br>insert the new image record, but the old record can be updated when its image content changed. Therefore, it’s necessary to<br>build a parameter including the features of primary key(format name) and image content.</p>
+<p>To achieve this two features, I used this two methods below:</p>
+<ol>
+<li>dHash (image feature)</li>
+<li>hexdigest (image format name feature)</li>
+</ol>
+<h1 id="dHash-Method"><a href="#dHash-Method" class="headerlink" title="dHash Method"></a>dHash Method</h1><p>In common case, there are three image hash methods(aHash, pHash and dHash) in mython. I chose the dhash method to generate<br>the image hash code.</p>
+<p>Dhash, also known as  Difference Hash, is a quick algorithm to compare in images visually. Comparing to ahash and phash,<br>this method is far more accurate and quick. That’s the most important reason for me to choose this image hash method.</p>
+<p>And this method to create dhash is very simple:</p>
+<ol>
+<li>Convert the image to grayscale</li>
+<li>Downsize it to a 9x9 thumbnail (size&#x3D;8 means an 8+1 by 8+1 image)</li>
+<li>Produce a 64-bit “row hash”: a 1 bit means the pixel intensity is increasing in the x direction, 0 means it’s decreasing</li>
+<li>Do the same to produce a 64-bit “column hash” in the y direction</li>
+<li>Combine the two values to produce the final 128-bit hash value</li>
+</ol>
+<p>We can apply this method by embedding the following code into our project.</p>
+<figure class="highlight pycon"><table><tr><td class="code"><pre><span class="line">import dhash</span><br><span class="line">from PIL import Image</span><br><span class="line"></span><br><span class="line">image = Image.open(&#x27;dhash-test.jpg&#x27;)</span><br><span class="line">row, col = dhash.dhash_row_col(image)</span><br><span class="line">print(dhash.format_bytes(row, col))</span><br><span class="line">print(dhash.format_hex(row, col))</span><br></pre></td></tr></table></figure>
+
+<h1 id="hexdigest"><a href="#hexdigest" class="headerlink" title="hexdigest"></a>hexdigest</h1><p>At first, I used the <strong>hash</strong>() function to get the text parameter’s hash code. However, this result hash code varied<br>every time the project processed.  This is because ths purpose of <strong>hash</strong>() function is to create the unique hash code<br>for program to identify, and its result is not fixed which cannot be used as text unique identification code.</p>
+<p>Then, I used hashlib library to construct the text hash code. We can use hexdigest() function by embedding the following<br>code into private code.</p>
+<figure class="highlight pycon"><table><tr><td class="code"><pre><span class="line">import hashlib</span><br><span class="line">md5 = hashlib.md5()</span><br><span class="line">md5.update(dev.encode(&#x27;utf-8&#x27;))</span><br><span class="line">format_name_hash = md5.hexdigest()</span><br></pre></td></tr></table></figure>
+
+<h1 id="conference"><a href="#conference" class="headerlink" title="conference"></a>conference</h1><p><a href="https://arxiv.org/abs/2006.00819">1. DHash: Enabling Dynamic and Efficient Hash Tables</a><br><a href="https://pypi.org/project/dhash/">2. Pypi dhash 1.3</a></p>
+]]></content>
+      <tags>
+        <tag>Basic</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Internship ASA(Apple Search Ads)</title>
     <url>/2022/04/07/Internship%20ASA(Apple%20Search%20Ads)/</url>
     <content><![CDATA[<p>本文是为了记录与总结笔者在实习(前10天)中完成的第一个小项目——<strong>ASA(Apple Search Ads)投放数据拉取</strong>.<br>该项目大体由数据拉取、数据清洗、数据存储三个部分构成，笔者在这个项目中，目前实现了每天定时拉取应用数据，对其进行格式化处理，上传至Bigquery数据库中。</p>
@@ -954,47 +1044,6 @@
       <tags>
         <tag>intership</tag>
         <tag>ads</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Image Fingerprint</title>
-    <url>/2022/06/07/Image_Fingerprint/</url>
-    <content><![CDATA[<p>When I tried to build a database for images, a parameter was required to designed for the identification of each image. </p>
-<p>In this article, I explored how to establish the fingerprint of each image by combining its<br>image dhash code and text hash code.</p>
-<center>
-        <img src="/2022/06/07/Image_Fingerprint/image_fingerprint_logo.jpg" width="80%">
-</center>
-
-
-<span id="more"></span>
-
-<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><p>The fingerprint wsa needed when I tried to establish my database for images. This database not only should be able to<br>insert the new image record, but the old record can be updated when its image content changed. Therefore, it’s necessary to<br>build a parameter including the features of primary key(format name) and image content.</p>
-<p>To achieve this two features, I used this two methods below:</p>
-<ol>
-<li>dHash (image feature)</li>
-<li>hexdigest (image format name feature)</li>
-</ol>
-<h1 id="dHash-Method"><a href="#dHash-Method" class="headerlink" title="dHash Method"></a>dHash Method</h1><p>In common case, there are three image hash methods(aHash, pHash and dHash) in mython. I chose the dhash method to generate<br>the image hash code.</p>
-<p>Dhash, also known as  Difference Hash, is a quick algorithm to compare in images visually. Comparing to ahash and phash,<br>this method is far more accurate and quick. That’s the most important reason for me to choose this image hash method.</p>
-<p>And this method to create dhash is very simple:</p>
-<ol>
-<li>Convert the image to grayscale</li>
-<li>Downsize it to a 9x9 thumbnail (size&#x3D;8 means an 8+1 by 8+1 image)</li>
-<li>Produce a 64-bit “row hash”: a 1 bit means the pixel intensity is increasing in the x direction, 0 means it’s decreasing</li>
-<li>Do the same to produce a 64-bit “column hash” in the y direction</li>
-<li>Combine the two values to produce the final 128-bit hash value</li>
-</ol>
-<p>We can apply this method by embedding the following code into our project.</p>
-<figure class="highlight pycon"><table><tr><td class="code"><pre><span class="line">import dhash</span><br><span class="line">from PIL import Image</span><br><span class="line"></span><br><span class="line">image = Image.open(&#x27;dhash-test.jpg&#x27;)</span><br><span class="line">row, col = dhash.dhash_row_col(image)</span><br><span class="line">print(dhash.format_bytes(row, col))</span><br><span class="line">print(dhash.format_hex(row, col))</span><br></pre></td></tr></table></figure>
-
-<h1 id="hexdigest"><a href="#hexdigest" class="headerlink" title="hexdigest"></a>hexdigest</h1><p>At first, I used the <strong>hash</strong>() function to get the text parameter’s hash code. However, this result hash code varied<br>every time the project processed.  This is because ths purpose of <strong>hash</strong>() function is to create the unique hash code<br>for program to identify, and its result is not fixed which cannot be used as text unique identification code.</p>
-<p>Then, I used hashlib library to construct the text hash code. We can use hexdigest() function by embedding the following<br>code into private code.</p>
-<figure class="highlight pycon"><table><tr><td class="code"><pre><span class="line">import hashlib</span><br><span class="line">md5 = hashlib.md5()</span><br><span class="line">md5.update(dev.encode(&#x27;utf-8&#x27;))</span><br><span class="line">format_name_hash = md5.hexdigest()</span><br></pre></td></tr></table></figure>
-
-<h1 id="conference"><a href="#conference" class="headerlink" title="conference"></a>conference</h1><p><a href="https://arxiv.org/abs/2006.00819">1. DHash: Enabling Dynamic and Efficient Hash Tables</a><br><a href="https://pypi.org/project/dhash/">2. Pypi dhash 1.3</a></p>
-]]></content>
-      <tags>
-        <tag>Basic</tag>
       </tags>
   </entry>
   <entry>
